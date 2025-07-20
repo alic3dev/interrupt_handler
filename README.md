@@ -47,7 +47,7 @@ make
 make clean
 ```
 
-## copyright
+## copyright|copyleft
 
-> ©️ copyright:alic3dev[2025]|all_rights_reserved
+> ©️ copyright:|copyleft:alic3dev[2025]|all_rights_reserved:all_lefts_reserved
 
