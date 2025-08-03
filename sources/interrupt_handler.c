@@ -116,3 +116,11 @@ void interrupt_handler_on_interrupt_thread_safe(int interrupt_code) {
   interrupt_handler_on_interrupt(interrupt_code);
   pthread_mutex_unlock(&interrupt_handler_interrupted_mutex);
 }
+
+void interrupt_handler_destroy() {
+  free(
+    interrupt_handler_on_interrupt_functions
+  );
+
+  pthread_mutex_destroy(&interrupt_handler_interrupted_mutex);
+}

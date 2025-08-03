@@ -11,4 +11,3 @@ jobs:
     - uses: actions/checkout@v4
     - name: continuous_integration_build_make
       run: mkdir -p objects library && make
-
