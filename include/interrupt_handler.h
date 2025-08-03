@@ -14,4 +14,6 @@ void interrupt_handler_interrupt_function_remove(interrupt_handler_on_interrupt_
 void interrupt_handler_on_interrupt(int);
 void interrupt_handler_on_interrupt_thread_safe(int);
 
+void interrupt_handler_destroy();
+
 #endif
