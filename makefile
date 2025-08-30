@@ -1,17 +1,17 @@
-project_name=interrupt_handler
+name=interrupt_handler
 
-include_directory=include
-library_directory=library
-objects_directory=objects
-sources_directory=sources
+directory_include=include
+directory_library=library
+directory_objects=objects
+directory_sources=sources
 
-out_file=$(library_directory)/$(project_name).o
+file_library=${directory_library}/${name}.o
 
-source_files=$(wildcard $(sources_directory)/*.c)
-object_files=$(patsubst $(sources_directory)/%.c, $(objects_directory)/%.o, $(source_files))
+files_sources=${wildcard ${directory_sources}/*.c}
+files_objects=${patsubst ${directory_sources}/%.c, ${directory_objects}/%.o, ${files_sources}}
 
 cc=gcc
-c_flags=-O3 -I$(include_directory)
+c_flags=-O3 -I${directory_include}
 
 ld=ld
 ld_flags=
@@ -19,16 +19,15 @@ ld_flags=
 strip=strip
 strip_flags=-x
 
-$(out_file): $(object_files)
-	mkdir -p $(library_directory)
-	$(ld) $(ld_flags) -r $^ -o $(out_file)
-	${strip} ${strip_flags} ${out_file}
+${file_library}: ${files_objects}
+	mkdir -p ${directory_library}
+	${ld} ${ld_flags} -r $^ -o ${file_library}
+	${strip} ${strip_flags} ${file_library}
 
-
-$(objects_directory)/%.o: $(sources_directory)/%.c
-	mkdir -p $(objects_directory)
-	$(cc) $(c_flags) -c $< -o $@
+${directory_objects}/%.o: ${directory_sources}/%.c
+	mkdir -p ${directory_objects}
+	${cc} ${c_flags} -c $< -o $@
 
 clean:
-	-rm $(out_file) $(library_directory)/*.o $(objects_directory)/*.o 2> /dev/null
+	-rm ${file_library} ${directory_library}/*.o ${directory_objects}/*.o 2> /dev/null
 
