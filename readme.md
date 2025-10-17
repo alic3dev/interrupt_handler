@@ -35,19 +35,21 @@ if (interrupt_handler_interrupted == 0) {
 }
 ```
 
-## build
+## development
 
-```sh
-make
-```
+### `make` targets
 
-## clean
-
-```sh
+```zsh
+# build library
+make interrupt_handler
+## clean library
 make clean
 ```
+
+### `make` flags
+
+- `debug=1`:adds->{`debugging_symbols`}:disables->{`optimizations`};
 
 ## copyright|copyleft
 
 > ©️ copyright:|copyleft:alic3dev[2025]|all_rights_reserved:all_lefts_reserved
-
