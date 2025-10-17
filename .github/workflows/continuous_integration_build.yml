@@ -8,6 +8,16 @@ jobs:
   continuous_integration_build:
     runs-on: macos-latest
     steps:
+      - name: git_initialization
+        run: git config --global init.defaultBranch core
       - uses: actions/checkout@v4
-      - name: continuous_integration_build_make
-        run: mkdir -p objects library && make
+      - name: make:interrupt_handler_objects
+        run: make interrupt_handler_objects
+      - name: make:interrupt_handler_dylib
+        run: make interrupt_handler_dylib
+      - name: make:interrupt_handler_dynamic
+        run: make interrupt_handler_dynamic
+      - name: make:interrupt_handler_object
+        run: make interrupt_handler_object
+      - name: make:interrupt_handler_static
+        run: make interrupt_handler_static
