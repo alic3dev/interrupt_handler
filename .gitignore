@@ -1,5 +1,3 @@
-# build
 objects
 library
-*.o
-
+library_debug
