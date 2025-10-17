@@ -56,6 +56,13 @@ strip_flags=-x
 
 ${name}: ${file_library_dylib} ${file_library_dynamic} ${file_library_object} ${file_library_static}
 
+${name}_objects: ${files_objects}
+
+${name}_dylib: ${file_library_dylib}
+${name}_dynamic: ${file_library_dynamic}
+${name}_object: ${file_library_object}
+${name}_static: ${file_library_static}
+
 ${file_library_dylib}: ${files_objects}
 	mkdir -p ${directory_library}
 	${cc} -dynamiclib -install_name ${name_library_dylib_major} -current_version ${version} -compatibility_version ${version_major_minor} ${files_objects} -o ${file_library_dylib_major}
