@@ -1,13 +1,13 @@
 name: continuous_integration_build
 on:
   push:
-    branches: [ "core" ]
+    branches: ["core"]
   pull_request:
-    branches: [ "core" ]
+    branches: ["core"]
 jobs:
   continuous_integration_build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: continuous_integration_build_make
-      run: mkdir -p objects library && make
+      - uses: actions/checkout@v4
+      - name: continuous_integration_build_make
+        run: mkdir -p objects library && make
