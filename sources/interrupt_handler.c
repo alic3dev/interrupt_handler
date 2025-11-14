@@ -1,4 +1,4 @@
-#include "interrupt_handler.h"
+#include <interrupt_handler.h>
 
 #include <pthread.h>
 #include <signal.h>
@@ -18,7 +18,12 @@ void interrupt_handler_initialize() {
 
   struct sigaction signal_action;
   signal_action.sa_handler = interrupt_handler_on_interrupt;
-  sigaction(SIGINT, &signal_action, (void*)0);
+
+  sigaction(
+    SIGINT,
+    &signal_action,
+    (void*)0
+  );
 }
 
 void interrupt_handler_initialize_thread_safe() {
@@ -34,7 +39,12 @@ void interrupt_handler_initialize_thread_safe() {
 
   struct sigaction signal_action;
   signal_action.sa_handler = interrupt_handler_on_interrupt_thread_safe;
-  sigaction(SIGINT, &signal_action, (void*)0);
+
+  sigaction(
+    SIGINT,
+    &signal_action,
+    (void*)0
+  );
 }
 
 void interrupt_handler_interrupt_function_add(
@@ -47,7 +57,8 @@ void interrupt_handler_interrupt_function_add(
 
   interrupt_handler_on_interrupt_functions = realloc(
     interrupt_handler_on_interrupt_functions,
-    sizeof(interrupt_handler_on_interrupt_function) * interrupt_handler_on_interrupt_functions_length
+    sizeof(interrupt_handler_on_interrupt_function) *
+    interrupt_handler_on_interrupt_functions_length
   );
 
   interrupt_handler_on_interrupt_functions[
@@ -87,17 +98,22 @@ void interrupt_handler_interrupt_function_remove(
       
       interrupt_handler_on_interrupt_functions = realloc(
         interrupt_handler_on_interrupt_functions,
-        sizeof(interrupt_handler_on_interrupt_function) * interrupt_handler_on_interrupt_functions_length
+        sizeof(interrupt_handler_on_interrupt_function) *
+        interrupt_handler_on_interrupt_functions_length
       );
       
-      interrupt_handler_interrupt_function_remove(on_interrupt_function);
+      interrupt_handler_interrupt_function_remove(
+        on_interrupt_function
+      );
 
       break;
     }
   }
 }
 
-void interrupt_handler_on_interrupt(int interrupt_code) {
+void interrupt_handler_on_interrupt(
+  int interrupt_code
+) {
   interrupt_handler_interrupted = interrupt_code;
 
   for (
@@ -107,11 +123,15 @@ void interrupt_handler_on_interrupt(int interrupt_code) {
   ) {
     interrupt_handler_on_interrupt_functions[
       interrupt_handler_on_interrupt_function_index
-    ](interrupt_code);
+    ](
+      interrupt_code
+    );
   }
 }
 
-void interrupt_handler_on_interrupt_thread_safe(int interrupt_code) {
+void interrupt_handler_on_interrupt_thread_safe(
+  int interrupt_code
+) {
   pthread_mutex_lock(&interrupt_handler_interrupted_mutex);
   interrupt_handler_on_interrupt(interrupt_code);
   pthread_mutex_unlock(&interrupt_handler_interrupted_mutex);
@@ -126,5 +146,7 @@ void interrupt_handler_destroy() {
 void interrupt_handler_destroy_thread_safe() {
   interrupt_handler_destroy();
 
-  pthread_mutex_destroy(&interrupt_handler_interrupted_mutex);
+  pthread_mutex_destroy(
+    &interrupt_handler_interrupted_mutex
+  );
 }
