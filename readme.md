@@ -10,6 +10,14 @@ a_utility_library_for_catching_interrupts
 interrupt_handler_initialize();
 ```
 
+#### thread_safe
+
+```c
+interrupt_handler_initialize_thread_safe();
+```
+
+thread_safe will lock `interrupt_handler_interrupted_mutex` before calling functions added with `interrupt_handler_interrupt_function_add` then unlock the mutex once all functions have been called
+
 ### callbacks
 
 #### add
@@ -27,7 +35,9 @@ interrupt_handler_interrupt_function_remove(on_interrupt_function);
 ### status
 
 ```c
-if (interrupt_handler_interrupted == 0) {
+if (
+  interrupt_handler_interrupted == 0
+) {
   // not_interrupted_yet
 } else {
   // has_been_interrupted
