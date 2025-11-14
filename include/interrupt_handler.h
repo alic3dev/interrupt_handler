@@ -15,5 +15,6 @@ void interrupt_handler_on_interrupt(int);
 void interrupt_handler_on_interrupt_thread_safe(int);
 
 void interrupt_handler_destroy();
+void interrupt_handler_destroy_thread_safe();
 
 #endif
