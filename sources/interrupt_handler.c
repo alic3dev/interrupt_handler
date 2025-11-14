@@ -121,6 +121,10 @@ void interrupt_handler_destroy() {
   free(
     interrupt_handler_on_interrupt_functions
   );
+}
+
+void interrupt_handler_destroy_thread_safe() {
+  interrupt_handler_destroy();
 
   pthread_mutex_destroy(&interrupt_handler_interrupted_mutex);
 }
