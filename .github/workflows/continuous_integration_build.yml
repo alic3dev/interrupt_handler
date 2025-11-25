@@ -4,6 +4,9 @@ on:
     branches: ["core"]
   pull_request:
     branches: ["*"]
+env:
+  target_device_version_ios: 18.5
+  target_device_version_macos: 15.5
 jobs:
   continuous_integration_build:
     runs-on: macos-latest
@@ -12,12 +15,22 @@ jobs:
         run: git config --global init.defaultBranch core
       - uses: actions/checkout@v4
       - name: make:interrupt_handler_objects
-        run: make interrupt_handler_objects
+        run: make interrupt_handler_objects target_device_version=${{ env.target_device_version_macos }}
       - name: make:interrupt_handler_dylib
-        run: make interrupt_handler_dylib
+        run: make interrupt_handler_dylib target_device_version=${{ env.target_device_version_macos }}
       - name: make:interrupt_handler_dynamic
-        run: make interrupt_handler_dynamic
+        run: make interrupt_handler_dynamic target_device_version=${{ env.target_device_version_macos }}
       - name: make:interrupt_handler_object
-        run: make interrupt_handler_object
+        run: make interrupt_handler_object target_device_version=${{ env.target_device_version_macos }}
       - name: make:interrupt_handler_static
-        run: make interrupt_handler_static
+        run: make interrupt_handler_static target_device_version=${{ env.target_device_version_macos }}
+      - name: make:interrupt_handler_ios_objects
+        run: make interrupt_handler_ios_objects target_device_version=${{ env.target_device_version_ios }} target_device=iphone
+      - name: make:interrupt_handler_ios_dylib
+        run: make interrupt_handler_ios_dylib target_device_version=${{ env.target_device_version_ios }} target_device=iphone
+      - name: make:interrupt_handler_ios_dynamic
+        run: make interrupt_handler_ios_dynamic target_device_version=${{ env.target_device_version_ios }} target_device=iphone
+      - name: make:interrupt_handler_ios_object
+        run: make interrupt_handler_ios_object target_device_version=${{ env.target_device_version_ios }} target_device=iphone
+      - name: make:interrupt_handler_ios_static
+        run: make interrupt_handler_ios_static target_device_version=${{ env.target_device_version_ios }} target_device=iphone
