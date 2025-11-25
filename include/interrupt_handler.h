@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 
-typedef void (*interrupt_handler_on_interrupt_function)(int); 
+typedef void (*interrupt_handler_on_interrupt_function)(int);
 
 extern pthread_mutex_t interrupt_handler_interrupted_mutex;
 

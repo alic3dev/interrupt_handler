@@ -95,13 +95,13 @@ void interrupt_handler_interrupt_function_remove(
       interrupt_handler_on_interrupt_functions_length = (
         interrupt_handler_on_interrupt_functions_length - 1
       );
-      
+
       interrupt_handler_on_interrupt_functions = realloc(
         interrupt_handler_on_interrupt_functions,
         sizeof(interrupt_handler_on_interrupt_function) *
         interrupt_handler_on_interrupt_functions_length
       );
-      
+
       interrupt_handler_interrupt_function_remove(
         on_interrupt_function
       );
