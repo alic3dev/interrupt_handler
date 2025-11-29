@@ -6,6 +6,7 @@
 typedef void (*interrupt_handler_on_interrupt_function)(int);
 
 extern pthread_mutex_t interrupt_handler_interrupted_mutex;
+extern pthread_mutex_t interrupt_handler_not_interrupted_mutex;
 
 extern unsigned char interrupt_handler_interrupted;
 
