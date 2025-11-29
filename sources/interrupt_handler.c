@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 pthread_mutex_t interrupt_handler_interrupted_mutex;
+pthread_mutex_t interrupt_handler_not_interrupted_mutex;
 unsigned char interrupt_handler_interrupted = 0;
 
 interrupt_handler_on_interrupt_function* interrupt_handler_on_interrupt_functions;
@@ -30,6 +31,15 @@ void interrupt_handler_initialize_thread_safe() {
   pthread_mutex_init(
     &interrupt_handler_interrupted_mutex,
     (void*)0
+  );
+
+  pthread_mutex_init(
+    &interrupt_handler_not_interrupted_mutex,
+    (void*)0
+  );
+
+  pthread_mutex_lock(
+    &interrupt_handler_not_interrupted_mutex
   );
 
   interrupt_handler_on_interrupt_functions = malloc(
@@ -132,9 +142,21 @@ void interrupt_handler_on_interrupt(
 void interrupt_handler_on_interrupt_thread_safe(
   int interrupt_code
 ) {
-  pthread_mutex_lock(&interrupt_handler_interrupted_mutex);
-  interrupt_handler_on_interrupt(interrupt_code);
-  pthread_mutex_unlock(&interrupt_handler_interrupted_mutex);
+  pthread_mutex_lock(
+    &interrupt_handler_interrupted_mutex
+  );
+
+  pthread_mutex_unlock(
+    &interrupt_handler_not_interrupted_mutex
+  );
+
+  interrupt_handler_on_interrupt(
+    interrupt_code
+  );
+
+  pthread_mutex_unlock(
+    &interrupt_handler_interrupted_mutex
+  );
 }
 
 void interrupt_handler_destroy() {
@@ -148,5 +170,9 @@ void interrupt_handler_destroy_thread_safe() {
 
   pthread_mutex_destroy(
     &interrupt_handler_interrupted_mutex
+  );
+
+  pthread_mutex_destroy(
+    &interrupt_handler_not_interrupted_mutex
   );
 }

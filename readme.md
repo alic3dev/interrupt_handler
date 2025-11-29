@@ -16,7 +16,8 @@ interrupt_handler_initialize();
 interrupt_handler_initialize_thread_safe();
 ```
 
-thread_safe will lock `interrupt_handler_interrupted_mutex` before calling functions added with `interrupt_handler_interrupt_function_add` then unlock the mutex once all functions have been called
+- will lock `interrupt_handler_not_interrupted_mutex` during initialization and unlock after locking `interrupt_handler_interrupted_mutex` during interruption
+- will lock `interrupt_handler_interrupted_mutex` before calling functions added with `interrupt_handler_interrupt_function_add` then unlock the mutex once all functions have been called
 
 ### callbacks
 
