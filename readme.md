@@ -24,13 +24,83 @@ interrupt_handler_initialize_thread_safe();
 #### add
 
 ```c
-interrupt_handler_interrupt_function_add(on_interrupt_function);
+interrupt_handler_interrupt_function_add(
+  on_interrupt_function
+);
+```
+
+##### with_data
+
+```c
+interrupt_handler_interrupt_function_add_with_data(
+  on_interrupt_function,
+  on_interrupt_function_data
+);
+```
+
+do not pass `(void*) 0` values as the data parameter or your function will be considered and cast as `interrupt_handler_on_interrupt_function` rather than `interrupt_handler_on_interrupt_function_with_data`
+if there is a possibility that the the data you are passing may be `(void*) 0` then you should make use of a conditional statement and use the `interrupt_handler_interrupt_function_add` function instead
+
+##### with_data_conditionally
+
+```c
+void on_interrupt_function(
+  int code_interrupt
+) {
+  on_interrupt_function_with_data(
+    code_interrupt,
+    (void*) 0
+  );
+}
+
+void on_interrupt_function_with_data(
+  int code_interrupt,
+  void* data
+) {
+  if (
+    data == (void*) 0
+  ) {
+    // will only branch this direction from `interrupt_handler_interrupt_function_add` with `on_interrupt_function`
+
+    // functionality implementation
+  } else {
+    // will only branch this direction from `interrupt_handler_interrupt_function_add_with_data` with `on_interrupt_function_with_data`
+    struct some_structure* some_structure = (
+      data
+    );
+
+    // functionality implementation
+  }
+}
+
+int main() {
+  struct some_structure* some_structure = (
+    some_function_call()
+  );
+
+  if (
+    some_structure == (void*) 0
+  ) {
+    interrupt_handler_interrupt_function_add(
+      on_interrupt_function
+    );
+  } else {
+    interrupt_handler_interrupt_function_add_with_data(
+      on_interrupt_function_with_data,
+      some_structure
+    );
+  }
+
+  // functionality implementation
+}
 ```
 
 #### remove
 
 ```c
-interrupt_handler_interrupt_function_remove(on_interrupt_function);
+interrupt_handler_interrupt_function_remove(
+  on_interrupt_function
+);
 ```
 
 ### status
