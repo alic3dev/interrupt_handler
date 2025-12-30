@@ -8,12 +8,18 @@ pthread_mutex_t interrupt_handler_interrupted_mutex;
 pthread_mutex_t interrupt_handler_not_interrupted_mutex;
 unsigned char interrupt_handler_interrupted = 0;
 
-interrupt_handler_on_interrupt_function* interrupt_handler_on_interrupt_functions;
+void** interrupt_handler_on_interrupt_functions;
+void** interrupt_handler_on_interrupt_data;
 unsigned int interrupt_handler_on_interrupt_functions_length;
 
 void interrupt_handler_initialize() {
   interrupt_handler_on_interrupt_functions = malloc(
-    sizeof(interrupt_handler_on_interrupt_function) *
+    sizeof(void*) *
+    interrupt_handler_on_interrupt_functions_length
+  );
+
+  interrupt_handler_on_interrupt_data = malloc(
+    sizeof(void*) *
     interrupt_handler_on_interrupt_functions_length
   );
 
@@ -43,7 +49,12 @@ void interrupt_handler_initialize_thread_safe() {
   );
 
   interrupt_handler_on_interrupt_functions = malloc(
-    sizeof(interrupt_handler_on_interrupt_function) *
+    sizeof(void*) *
+    interrupt_handler_on_interrupt_functions_length
+  );
+
+  interrupt_handler_on_interrupt_data = malloc(
+    sizeof(void*) *
     interrupt_handler_on_interrupt_functions_length
   );
 
@@ -60,6 +71,16 @@ void interrupt_handler_initialize_thread_safe() {
 void interrupt_handler_interrupt_function_add(
   interrupt_handler_on_interrupt_function on_interrupt_function
 ) {
+  interrupt_handler_interrupt_function_add_with_data(
+    (interrupt_handler_on_interrupt_function_with_data) on_interrupt_function,
+    (void*) 0
+  );
+}
+
+void interrupt_handler_interrupt_function_add_with_data(
+  interrupt_handler_on_interrupt_function_with_data on_interrupt_function,
+  void* on_interrupt_function_data
+) {
   interrupt_handler_on_interrupt_functions_length = (
     interrupt_handler_on_interrupt_functions_length +
     1
@@ -67,7 +88,7 @@ void interrupt_handler_interrupt_function_add(
 
   interrupt_handler_on_interrupt_functions = realloc(
     interrupt_handler_on_interrupt_functions,
-    sizeof(interrupt_handler_on_interrupt_function) *
+    sizeof(void*) *
     interrupt_handler_on_interrupt_functions_length
   );
 
@@ -75,6 +96,19 @@ void interrupt_handler_interrupt_function_add(
     interrupt_handler_on_interrupt_functions_length -
     1
   ] = on_interrupt_function;
+
+  interrupt_handler_on_interrupt_data = realloc(
+    interrupt_handler_on_interrupt_data,
+    sizeof(void*) *
+    interrupt_handler_on_interrupt_functions_length
+  );
+
+  interrupt_handler_on_interrupt_data[
+    interrupt_handler_on_interrupt_functions_length -
+    1
+  ] = (
+    on_interrupt_function_data
+  );
 }
 
 void interrupt_handler_interrupt_function_remove(
@@ -108,7 +142,13 @@ void interrupt_handler_interrupt_function_remove(
 
       interrupt_handler_on_interrupt_functions = realloc(
         interrupt_handler_on_interrupt_functions,
-        sizeof(interrupt_handler_on_interrupt_function) *
+        sizeof(void*) *
+        interrupt_handler_on_interrupt_functions_length
+      );
+
+      interrupt_handler_on_interrupt_data = realloc(
+        interrupt_handler_on_interrupt_data,
+        sizeof(void*) *
         interrupt_handler_on_interrupt_functions_length
       );
 
@@ -131,11 +171,30 @@ void interrupt_handler_on_interrupt(
     interrupt_handler_on_interrupt_function_index < interrupt_handler_on_interrupt_functions_length;
     ++interrupt_handler_on_interrupt_function_index
   ) {
-    interrupt_handler_on_interrupt_functions[
-      interrupt_handler_on_interrupt_function_index
-    ](
-      interrupt_code
+    void* interrupt_handler_function = (
+      interrupt_handler_on_interrupt_functions[
+        interrupt_handler_on_interrupt_function_index
+      ]
     );
+
+    void* interrupt_handler_function_data = (
+      interrupt_handler_on_interrupt_data[
+        interrupt_handler_on_interrupt_function_index
+      ]
+    );
+
+    if (
+      interrupt_handler_function_data == (void*) 0
+    ) {
+      ((interrupt_handler_on_interrupt_function) interrupt_handler_function)(
+        interrupt_code
+      );
+    } else {
+      ((interrupt_handler_on_interrupt_function_with_data) interrupt_handler_function)(
+        interrupt_code,
+        interrupt_handler_function_data
+      );
+    }
   }
 }
 
@@ -162,6 +221,10 @@ void interrupt_handler_on_interrupt_thread_safe(
 void interrupt_handler_destroy() {
   free(
     interrupt_handler_on_interrupt_functions
+  );
+
+  free(
+    interrupt_handler_on_interrupt_data
   );
 }
 
