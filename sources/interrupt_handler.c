@@ -73,7 +73,7 @@ void interrupt_handler_interrupt_function_add(
 ) {
   interrupt_handler_interrupt_function_add_with_data(
     (interrupt_handler_on_interrupt_function_with_data) on_interrupt_function,
-    (void*) 0
+    0
   );
 }
 
