@@ -4,7 +4,6 @@
 
 #include <pthread.h>
 #include <signal.h>
-#include <stdlib.h>
 
 pthread_mutex_t interrupt_handler_interrupted_mutex;
 pthread_mutex_t interrupt_handler_not_interrupted_mutex;
