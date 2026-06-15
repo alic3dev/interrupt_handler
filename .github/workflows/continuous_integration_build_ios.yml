@@ -7,7 +7,7 @@ on:
 env:
   target_device_version: 18.5
 jobs:
-  continuous_integration_build:
+  continuous_integration_build_ios:
     runs-on: macos-latest
     steps:
       - name: git_initialization
