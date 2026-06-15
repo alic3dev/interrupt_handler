@@ -29,9 +29,9 @@ directory_library=${directory_library_base}/${target_os}/release
 directory_objects=${directory_objects_base}/${target_os}/release
 
 ifeq (${debug}, 1)
-	name:=${name}_debug
-	directory_library:=${directory_library_base}/${target_os}/debug
-	directory_objects=${directory_objects_base}/${target_os}/debug
+name:=${name}_debug
+directory_library:=${directory_library_base}/${target_os}/debug
+directory_objects=${directory_objects_base}/${target_os}/debug
 endif
 
 directory_include=include
@@ -57,7 +57,7 @@ files_sources=${wildcard ${directory_sources}/*.c}
 files_objects=${patsubst ${directory_sources}/%.c, ${directory_objects}/%.o, ${files_sources}}
 
 ifndef target_device_version
-	target_device_version=26.1
+target_device_version=26.1
 endif
 
 ifeq (${target_os},macos)
