@@ -28,6 +28,14 @@ directory_library_base=library
 directory_library=${directory_library_base}/${target_os}/release
 directory_objects=${directory_objects_base}/${target_os}/release
 
+directory_clic3=../clic3
+directory_clic3_include=${directory_clic3}/include
+ifeq (${target_os},ios)
+directory_clic3_library=${directory_clic3}/library/ios/release
+else
+directory_clic3_library=${directory_clic3}/library/macos/release
+endif
+
 ifeq (${debug}, 1)
 name:=${name}_debug
 directory_library:=${directory_library_base}/${target_os}/debug
@@ -52,6 +60,14 @@ file_library_dynamic=${directory_library}/${name}.so
 file_library_dynamic_major=${directory_library}/${name_library_dynamic_major}
 
 file_library_static=${directory_library}/${name}.a
+
+ifeq (${target_os},ios)
+file_clic3_library_dylib=${directory_clic3_library}/clic3.${version_target_clic3}_ios.dylib
+file_clic3_library_dynamic=${directory_clic3_library}/clic3_ios.so
+else
+file_clic3_library_dylib=${directory_clic3_library}/clic3.${version_target_clic3}.dylib
+file_clic3_library_dynamic=${directory_clic3_library}/clic3.so
+endif
 
 files_sources=${wildcard ${directory_sources}/*.c}
 files_objects=${patsubst ${directory_sources}/%.c, ${directory_objects}/%.o, ${files_sources}}
@@ -109,7 +125,7 @@ install: ${file_library_dylib}
 
 ${file_library_dylib}: ${files_objects}
 	mkdir -p ${directory_library}
-	${cc} -dynamiclib ${c_flags_platform} -install_name ${name_library_dylib_major} -current_version ${version} -compatibility_version ${version_major_minor} ${files_objects} -o ${file_library_dylib_major}
+	${cc} -dynamiclib ${c_flags_platform} -install_name ${name_library_dylib_major} -current_version ${version} -compatibility_version ${version_major_minor} ${files_objects} ${file_clic3_lbrary_dylib} -o ${file_library_dylib_major}
 ifneq (${debug}, 1)
 	${strip} ${strip_flags} ${file_library_dylib_major}
 endif
@@ -118,7 +134,7 @@ endif
 
 ${file_library_dynamic}: ${files_objects}
 	mkdir -p ${directory_library}
-	${cc} -shared ${c_flags_platform} -install_name ${name_library_dynamic_major} -current_version ${version} -compatibility_version ${version_major_minor} ${files_objects} -o ${file_library_dynamic_major}
+	${cc} -shared ${c_flags_platform} -install_name ${name_library_dynamic_major} -current_version ${version} -compatibility_version ${version_major_minor} ${files_objects} ${file_clic3_library_dynamic} -o ${file_library_dynamic_major}
 ifneq (${debug}, 1)
 	${strip} ${strip_flags} ${file_library_dynamic_major}
 endif
