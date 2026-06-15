@@ -79,7 +79,7 @@ c_flags_platform=-target ${target_platform} -isysroot ${directory_sdk}
 c_flags=${c_flags_platform} -I${directory_include}
 
 ifeq (${debug}, 1)
-c_flags:=${c_flags} -O0 -g -v -da -Q
+c_flags:=${c_flags} -O0 -g -v
 else
 c_flags:=${c_flags} -O3
 endif
