@@ -7,7 +7,7 @@ on:
 env:
   enabled_caching: 1
   enabled_caching_clic3: 1
-  key_cache_clic3: cache_clic3_0_0_0
+  key_cache_clic3: cache_clic3_ios_0_0_0
   target_device_version: 18.5
 jobs:
   continuous_integration_build_ios:
