@@ -22,7 +22,7 @@ jobs:
       - name: cache_restore_clic3
         id: cache_restore_clic3
         if: ${{ env.enabled_caching == '1' && env.enabled_caching_clic3 == '1' }}
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: clic3
           key: ${{ env.key_cache_clic3 }}
@@ -40,7 +40,7 @@ jobs:
       - name: cache_save_clic3
         id: cache_save_clic3
         if: ${{ env.enabled_caching == '1' && env.enabled_caching_clic3 == '1' && steps.cache_restore_clic3.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: clic3
           key: ${{ env.key_cache_clic3 }}
