@@ -147,7 +147,7 @@ ${directory_objects}/%_${target_os}.o: ${directory_sources}/%.c
 clean: clean_library clean_objects
 
 clean_library:
-	-rm -r ${directory_library_base} 2> /dev/null
+	if [[ -d ${directory_library_base} ]]; then rm -r ${directory_library_base}; fi
 
 clean_objects:
-	-rm -r ${directory_objects_base} 2> /dev/null
+	if [[ -d ${directory_objects_base} ]]; then rm -r ${directory_objects_base}; fi
