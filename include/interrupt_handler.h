@@ -1,10 +1,16 @@
-#ifndef __interrupt_handler_h
-#define __interrupt_handler_h
+#ifndef __interrupt_handler_interrupt_handler_h
+#define __interrupt_handler_interrupt_handler_h
 
 #include <pthread.h>
 
-typedef void (*interrupt_handler_on_interrupt_function)(int);
-typedef void (*interrupt_handler_on_interrupt_function_with_data)(int, void*);
+typedef void (*interrupt_handler_on_interrupt_function)(
+  int
+);
+
+typedef void (*interrupt_handler_on_interrupt_function_with_data)(
+  int,
+  void*
+);
 
 extern pthread_mutex_t interrupt_handler_interrupted_mutex;
 extern pthread_mutex_t interrupt_handler_not_interrupted_mutex;
