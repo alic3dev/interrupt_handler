@@ -22,6 +22,8 @@ version_patch=0
 version_major_minor=${version_major}.${version_minor}
 version=${version_major}.${version_minor}.${version_patch}
 
+version_target_clic3=0
+
 directory_objects_base=objects
 directory_library_base=library
 
@@ -62,7 +64,7 @@ file_library_dynamic_major=${directory_library}/${name_library_dynamic_major}
 file_library_static=${directory_library}/${name}.a
 
 ifeq (${target_os},ios)
-file_clic3_library_dylib=${directory_clic3_library}/clic3.${version_target_clic3}_ios.dylib
+file_clic3_library_dylib=${directory_clic3_library}/clic3_ios.${version_target_clic3}.dylib
 file_clic3_library_dynamic=${directory_clic3_library}/clic3_ios.so
 else
 file_clic3_library_dylib=${directory_clic3_library}/clic3.${version_target_clic3}.dylib
@@ -125,7 +127,7 @@ install: ${file_library_dylib}
 
 ${file_library_dylib}: ${files_objects}
 	mkdir -p ${directory_library}
-	${cc} -dynamiclib ${c_flags_platform} -install_name ${name_library_dylib_major} -current_version ${version} -compatibility_version ${version_major_minor} ${files_objects} ${file_clic3_lbrary_dylib} -o ${file_library_dylib_major}
+	${cc} -dynamiclib ${c_flags_platform} -install_name ${name_library_dylib_major} -current_version ${version} -compatibility_version ${version_major_minor} ${files_objects} ${file_clic3_library_dylib} -o ${file_library_dylib_major}
 ifneq (${debug}, 1)
 	${strip} ${strip_flags} ${file_library_dylib_major}
 endif
