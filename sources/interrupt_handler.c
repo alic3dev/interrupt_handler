@@ -1,5 +1,7 @@
 #include <interrupt_handler.h>
 
+#include <clic3_memory.h>
+
 #include <pthread.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -13,14 +15,18 @@ void** interrupt_handler_on_interrupt_data;
 unsigned int interrupt_handler_on_interrupt_functions_length;
 
 void interrupt_handler_initialize() {
-  interrupt_handler_on_interrupt_functions = malloc(
-    sizeof(void*) *
-    interrupt_handler_on_interrupt_functions_length
+  interrupt_handler_on_interrupt_functions = (
+    clic3_memory_allocate_raw(
+      sizeof(void*) *
+      interrupt_handler_on_interrupt_functions_length
+    )
   );
 
-  interrupt_handler_on_interrupt_data = malloc(
-    sizeof(void*) *
-    interrupt_handler_on_interrupt_functions_length
+  interrupt_handler_on_interrupt_data = (
+    clic3_memory_allocate_raw(
+      sizeof(void*) *
+      interrupt_handler_on_interrupt_functions_length
+    )
   );
 
   struct sigaction signal_action;
@@ -48,14 +54,22 @@ void interrupt_handler_initialize_thread_safe() {
     &interrupt_handler_not_interrupted_mutex
   );
 
-  interrupt_handler_on_interrupt_functions = malloc(
-    sizeof(void*) *
-    interrupt_handler_on_interrupt_functions_length
+  interrupt_handler_on_interrupt_functions = (
+    clic3_memory_allocate_raw(
+      sizeof(
+        void*
+      ) *
+      interrupt_handler_on_interrupt_functions_length
+    )
   );
 
-  interrupt_handler_on_interrupt_data = malloc(
-    sizeof(void*) *
-    interrupt_handler_on_interrupt_functions_length
+  interrupt_handler_on_interrupt_data = (
+    clic3_memory_allocate_raw(
+      sizeof(
+        void*
+      ) *
+      interrupt_handler_on_interrupt_functions_length
+    )
   );
 
   struct sigaction signal_action;
@@ -86,10 +100,12 @@ void interrupt_handler_interrupt_function_add_with_data(
     1
   );
 
-  interrupt_handler_on_interrupt_functions = realloc(
-    interrupt_handler_on_interrupt_functions,
-    sizeof(void*) *
-    interrupt_handler_on_interrupt_functions_length
+  clic3_memory_reallocate_raw(
+    &interrupt_handler_on_interrupt_functions,
+    (
+      sizeof(void*) *
+      interrupt_handler_on_interrupt_functions_length
+    )
   );
 
   interrupt_handler_on_interrupt_functions[
@@ -97,10 +113,12 @@ void interrupt_handler_interrupt_function_add_with_data(
     1
   ] = on_interrupt_function;
 
-  interrupt_handler_on_interrupt_data = realloc(
-    interrupt_handler_on_interrupt_data,
-    sizeof(void*) *
-    interrupt_handler_on_interrupt_functions_length
+  clic3_memory_reallocate_raw(
+    &interrupt_handler_on_interrupt_data,
+    (
+      sizeof(void*) *
+      interrupt_handler_on_interrupt_functions_length
+    )
   );
 
   interrupt_handler_on_interrupt_data[
@@ -140,16 +158,20 @@ void interrupt_handler_interrupt_function_remove(
         interrupt_handler_on_interrupt_functions_length - 1
       );
 
-      interrupt_handler_on_interrupt_functions = realloc(
-        interrupt_handler_on_interrupt_functions,
-        sizeof(void*) *
-        interrupt_handler_on_interrupt_functions_length
+      clic3_memory_reallocate_raw(
+        &interrupt_handler_on_interrupt_functions,
+        (
+          sizeof(void*) *
+          interrupt_handler_on_interrupt_functions_length
+        )
       );
 
-      interrupt_handler_on_interrupt_data = realloc(
-        interrupt_handler_on_interrupt_data,
-        sizeof(void*) *
-        interrupt_handler_on_interrupt_functions_length
+      clic3_memory_reallocate_raw(
+        &interrupt_handler_on_interrupt_data,
+        (
+          sizeof(void*) *
+          interrupt_handler_on_interrupt_functions_length
+        )
       );
 
       interrupt_handler_interrupt_function_remove(
@@ -219,11 +241,11 @@ void interrupt_handler_on_interrupt_thread_safe(
 }
 
 void interrupt_handler_destroy() {
-  free(
+  clic3_memory_free_raw(
     interrupt_handler_on_interrupt_functions
   );
 
-  free(
+  clic3_memory_free_raw(
     interrupt_handler_on_interrupt_data
   );
 }
