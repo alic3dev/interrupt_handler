@@ -92,7 +92,7 @@ endif
 
 cc=clang
 c_flags_platform=-target ${target_platform} -isysroot ${directory_sdk}
-c_flags=${c_flags_platform} -I${directory_include}
+c_flags=${c_flags_platform} -I${directory_include} -I${directory_clic3_include}
 
 ifeq (${debug}, 1)
 c_flags:=${c_flags} -O0 -g -v
